@@ -1,4 +1,4 @@
-package step11_myArt;
+package review;
 
 import java.time.LocalDateTime;
 
@@ -30,7 +30,7 @@ import lombok.Setter;
 public class Emp1 {
 
 	@Id
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "emp1_seq") S
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "emp1_seq") 
 	@Column(name = "EMPNO")
 	private int empNo;
 
