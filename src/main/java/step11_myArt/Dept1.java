@@ -32,7 +32,6 @@ public class Dept1 {
 
 	@Id
 	@NonNull
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dept1_seq") 
 	@Column(name = "DEPTNO")
 	private Integer deptNo;
 
@@ -48,9 +47,3 @@ public class Dept1 {
 	private List<Emp1> emp1 = new ArrayList<>();
 }
 
-/*
- * create sequence hibernate_sequence start with 1 increment by 1 create table
- * Team1 ( team_id number(19,0) not null, team_name varchar2(20), primary key
- * (team_id) );
- * 수정
- */

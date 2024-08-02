@@ -6,6 +6,12 @@
  * 하위클래스 개발 단 미완성 메소드를 재정의 필수
  *  
  * public class SessionImpl implements EntityManager{}
+ * 
+ * 
+ * 
+ * 
+ * 
+ *  변경점 
  */
 package util;
 
