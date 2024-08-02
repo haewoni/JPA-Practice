@@ -1,6 +1,6 @@
 # JPA Join 및 CRUD 학습 내용 정리 📚
 
-<h2 style="font-size: 25px;"> ✨개발팀원 ✨<br>
+<h2 style="font-size: 25px;">< 충돌원인  >✨<br>
 </h2>
 
 
