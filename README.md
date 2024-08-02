@@ -6,14 +6,14 @@
 
 |<img src="https://avatars.githubusercontent.com/u/86951396?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/98442485?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/90971532?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/81280628?v=4" width="150" height="150"/>|
 |:-:|:-:|:-:|:-:|
-|[@이아영](https://github.com/ayleeee)|[@신혜원](https://github.com/haewoni)|[@이승언](https://github.com/seungunleeee)|[@손대현](https://github.com/daehyeon)|
+|[@이아영](https://github.com/ayleeee)|[@신혜원](https://github.com/haewoni)|[@이승언](https://github.com/seungunleeee)|[@손대현](https://github.com/DaeHyeonSon)|
 ---
 <br>
 
-DB를 제어에 한계가 있는 상황을 가정하여 ```<property name="hibernate.hbm2ddl.auto" value="none" /> ```인 상태에서
-기존의 데이터를 crud를 수행하였다.
+DB 제어에 한계가 있는 상황을 가정하여 ```<property name="hibernate.hbm2ddl.auto" value="none" /> ```인 상태에서
+기존의 데이터에 crud를 수행하였다.
 
-먼저 <b>Create</b> , <b>Update</b> , <b>Delete</b>를 하는 과정에서 모두 같은 에러를 마주하였다.
+먼저 <b>Create</b> , <b>Update</b> , <b>Delete</b>를 하는 과정에서 동일한 에러를 마주하였다.
 <br>예제로 제공받은 코드의 <b>@GeneratedValue</b> 어노테이션은 emp1 , dept1 테이블에 존재하지 않는 sequence에 매핑을 하고 있다.
 따라서 데이터베이스에 추가 , 수정 , 삭제하는 과정에서 그림과 같은 에러가 발생했다.<br>
 
@@ -23,7 +23,7 @@ DB를 제어에 한계가 있는 상황을 가정하여 ```<property name="hiber
 
 <b>@GeneratedValue</b>와 sequence의 관계가 존재하지 않았음에도 예제를 제공받았을 때 sequence 문제를 고려하지 않은채 추가, 수정, 삭제 작업을 한 것이 문제였다.
 
-이를 해결하기 위해 @GeneratedValue와 관련한 Sequence들을 DBeaver를 통해 확인한 후 관련이 없다는 것을 파악하고 @GeneratedValue를 지운 후 추가, 수정, 삭제를 수행하였고 문제없이 동작하는것을 확인하였다.
+문제를 해결하기 위해 @GeneratedValue와 sequence들간의 관계를 DBeaver를 사용하여 확인해 보기로 하였다. 여러 번 검토한 결과, 이 두 요소 사이에는 아무런 연관성이 없다는 것을 발견하였다. 그래서 @GeneratedValue를 삭제한 후, 다시 추가, 수정, 삭제 작업을 수행해보았고, 최종적으로 모든 작업이 문제 없이 동작하는 것을 확인하였다. 
 
 이후 DB에 이미 Sequence를 통해 id가 자동으로 증가되도록 관리되고 있는 상황에서
 @GeneratedValue를 작성하여 CRUD를 할 수 있도록 실습을 하였다.
@@ -60,8 +60,7 @@ public class Member4 {
 	private long memberId;
 ```
 
-```allocationSize = 50, initialValue = 1```은 sequence를 jpa를 이용해 생성할 경우 사용
-현재 우리의 목표는 DB에 기존에 적용되어있는 sequence에 맞게 CRUD를 수행하는 것 ```allocationSize = 50, initialValue = 1```를 지우고 아래와 같이 작성한 후 CRUD를 수행하였다.
+```allocationSize = 50, initialValue = 1```은 sequence를 jpa를 이용해 생성할 경우 사용한다. 현재 우리의 목표는 DB에 기존에 적용되어있는 sequence에 맞게 CRUD를 수행하는 것이기에,  ```allocationSize = 50, initialValue = 1```를 지우고 아래와 같이 작성한 후 CRUD를 수행하였다.
 
 <p align="center">
  <img src = "./img/SEQUENCE.PNG">
