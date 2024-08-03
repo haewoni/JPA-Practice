@@ -1,3 +1,0 @@
-test
-
-팀장의 master 브랜치를 log 정리를 위하여 rebase 할 경우를 위한 test file
