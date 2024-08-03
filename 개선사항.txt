@@ -1,0 +1,67 @@
+git stash 사용
+    git stash를 사용할 경우 staging area 와 working directory area를 모두 저장 
+    git apply 혹은 git checkout -- {stash@{Number} file을  통해 적용가능 
+    무엇 보다 한번 stash해놓으면 staging area 와 working directory 관리에 안전성 제공  
+    (항상staging area를 염두하며 git 사용하는 건 불가능) 
+    
+    commit  , rebase , merge등에서 발생한 예외 상황에서 
+    git stash , git reflog 확인 , git reset --hard , git stash apply 로 과정 통일 가능 .
+
+git merge 대신 rebase 사용
+    현재 merge가 완료되면 이전 commit 과 merge 성공으로 생겨난 commit 의 중복이 발생함 
+    
+    이러한 commit 중복은 아래와 같은 상황에 발생하는 중 
+        - git pull request 성공 
+        - git merge 성공 
+
+        즉 충돌이 발생하여 merge를 한 이후 원격 작업브랜치에 push ,  원격 작업브랜치의 pull request가 
+        merge 된 경우에도 메세지가 중복됨 
+
+        git pull request 를 승인하는 초록버튼 (Merge pull request) 에서 드롭다운 클릭 
+            Confirm squash and merge를 클릭하여 merge 시키면 pull request에 의한 중복 commit은 발생하지 않는 것 확인 
+
+        git merge가 성공했을 때 중복되는 커밋은 왜인지  git rebase -i 를 통해 제거되지 않는 상황 . 
+        로컬 마스터 브랜치를 로컬 작업 브랜치에서 merge 하는 대신 rebase명령어 사용 
+        - 작업브랜치에서 git rebase master를 사용하여 병합 
+        - 충돌시 resolve는 merge와 동일 
+        - 이후 commit을 하게되면 해당 commit만 남게됩니다.
+        - 로컬 작업브랜치에서 원격 작업브랜치로 push , pull request 작성 
+        
+
+A. 원격 작업 브랜치에 push 한 이후 , pull request를 만드는 과정에서 충돌 확인할 것인가?
+    pull request에서 충돌이 발생한 경우 
+    1. 로컬 master브랜치에서  원격 master 브랜치 pull 받기 
+    2. 로컬 작업 브랜치에서 로컬 master 브랜치와 병합을 해야함 
+
+    발생한 충돌이 단순 팀원의 pull request가 받아진게 원인인 경우 
+        - gitk --all 또는 vscode에서 확장자인 git graph 사용 하여 파악 
+        - 작업 브랜치에서 git rebase master
+        - rebase 이후 원격 작업 브랜치로 push 하기 전에 원격 작업 브랜치 삭제 (git push remote --delete {작업브랜치명} 
+        - git push origin {작업브랜치명}
+
+    발생한 충돌이 팀장의 log 정리 rebase에 의해 branch 구조가 달라진게 원인인 경우 
+        gitk --all 또는 vscode에서 확장자인 git graph 사용 하여 파악 , 팀장의 전파로 확인
+        - git checkout master
+        - git fetch origin 
+        - git reset --hard origin/master
+        - git pull origin master
+
+        - git checkout -b temp // 마스터 브랜치의 로그와 동일한 임시 브랜치 생성
+        - git checkout temp // 작업물을 담을 임시 브랜치 입니다. 
+        - git cherry-pick {작업 커밋 hash code} // 임시 브랜치에 작업물에 대한 커밋이 맨 상위에 추가됩니다.  
+        - git checkout {작업 브랜치}
+        - git push origin --delete {작업브랜치} // 원격 작업 브랜치 삭제 
+        - git checkout -- temp
+        - git branch -D {작업브랜치} // 로컬 작업브랜치 삭제 
+        - git checkout -b {작업브랜치 생성} // cherry pick이 적용된 임시 브랜치의 commit로그를 기반으로 한 작업브랜치 생성 
+        - git push origin 작업브랜치 
+
+        - 임시 브랜치 삭제 , 작업이 종료된 경우 원격 작업브랜치 삭제 
+ 
+
+B. 원격 작업 브랜치에 push 하기 전 원격 마스터 브랜치룰 로컬 마스터 브랜치에 pull 받은 이후 충돌을 확인 할 것인가?
+    1. 로컬 master브랜치에서  원격 master 브랜치 pull 받기
+        로컬브랜치로 pull 받은게 없다면 그대로 작업브랜치를 원격 작업브랜치에 push
+        
+        충돌이 발생한 경우 B또한 A와 동일 단
+        B의 경우 원격 브랜치로 push 하기전 확인하기 때문에  원격 작업브랜치를 삭제하는 단계를 줄일 수 있음 . 
